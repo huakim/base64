@@ -49,29 +49,29 @@ local function makeencoder( s62, s63, spad )
 	b64t[62] = s62 or '+'
 	b64t[63] = s63 or '/'
 	b64t[64] = spad or '='
-	encoder[0] = byte(b64t[0])
 	for b64code, char in ipairs(b64t) do
 		encoder[b64code] = char:byte()
 	end
+	encoder[0] = byte(b64t[0])
 	return encoder
 end
 
 local function makedecoder( s62, s63, spad )
 	local decoder = {}
 	local encode_source = makeencoder(s62, s63, spad)
-	decoder[ encode_source[0] ] = 0
 	for b64code, charcode in ipairs(encode_source) do
 		decoder[charcode] = b64code
 	end
+	decoder[ encode_source[0] ] = 0
 	return decoder
 end
 
 local function makedecoder_from( encoder )
 	local decoder = {}
-	decoder[ encoder[0] ] = 0
 	for b64code, charcode in ipairs(encoder) do
 		decoder[charcode] = b64code
 	end
+	decoder[ encoder[0] ] = 0
 	return decoder
 end
 
