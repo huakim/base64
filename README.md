@@ -1,7 +1,3 @@
-[![Build Status](https://travis-ci.org/iskolbin/lbase64.svg?branch=master)](https://travis-ci.org/iskolbin/lbase64)
-[![license](https://img.shields.io/badge/license-public%20domain-blue.svg)]()
-[![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
-
 Lua base64 encoder/decoder
 ==========================
 
@@ -18,6 +14,7 @@ assert( str == decoded )
 assert( b64str == encoded )
 ```
 
+
 base64.encode( str, encoder = DEFAULT, usecache = false )
 ---------------------------------------------------------
 Encodes `str` string using `encoder` table. By default uses table with `+` as
@@ -27,21 +24,23 @@ chunks of text (or another highly redundant data) it's possible to highly
 increase performace (for text approx. x2 gain) by using `usecache = true`. For
 binary data like images using cache decreasing performance.
 
+
 base64.decode( str, decoder = DEFAULT, usecache = false )
 ---------------------------------------------------------
 Decodes `str` string using `decoder` table. Default decoder uses same chars as
 default encoder.
 
+
 base64.makeencoder( s62 = '+', s63 = '/', spad = '=' )
 ------------------------------------------------------
-Make custom encoding table
+Make a custom encoding table
+
 
 base64.makedecoder( s62 = '+', s63 = '/', spad = '=' )
 ------------------------------------------------------
-Make custom decoding table
+Make a custom decoding table
 
-Install
--------
-```bash
-luarocks install base64
-```
+
+base64.makedecoder_from( encoder )
+------------------------------------------------------
+Make a custom decoding table from an existing encoding table.
