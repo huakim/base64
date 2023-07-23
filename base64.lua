@@ -1,25 +1,15 @@
--- Source: https://github.com/iskolbin/lbase64
-
-
 --[[
 
  base64 -- v1.5.3 public domain Lua base64 encoder/decoder
  no warranty implied; use at your own risk
 
- Needs bit32.extract function. If not present it's implemented using BitOp
- or Lua 5.3 native bit operators. For Lua 5.1 fallbacks to pure Lua
- implementation inspired by Rici Lake's post:
-   http://ricilake.blogspot.co.uk/2007/10/iterating-bits-in-lua.html
-
  author: Ilya Kolbin (iskolbin@gmail.com)
  url: github.com/iskolbin/lbase64
 
  COMPATIBILITY
-
- Lua 5.1+, LuaJIT
+ LuaJIT
 
  LICENSE
-
  See end of file for license information.
 
 --]]
@@ -114,31 +104,21 @@ end
 
 local function decode( b64, decoder, usecaching )
 	-- Contains Bugfix from the Issue https://github.com/iskolbin/lbase64/issues/5
-	
+
 	decoder = decoder or DEFAULT_DECODER
 	local pattern = pattern_prim
-	local decoder0 = decoder[0]
 	local s62,s63,spad
+	
 	if decoder then
-
-		if decoder0==62 then
-			s62 = 0
-		elseif decoder0==63 then
-			s63 = 0
-		elseif decoder0==64 then
-			spad = 0
-		end
-
-		for charcode, b64code in ipairs( decoder ) do
+		for charcode, b64code in pairs( decoder ) do
 			if b64code == 62 then s62 = charcode
 			elseif b64code == 63 then s63 = charcode
 			elseif b64code == 64 then spad = charcode
 			end
 		end
-
 		pattern = format( pattern_customdecoder, char(s62), char(s63), char(spad) )
-
 	end
+	
 	b64 = b64:gsub( pattern, str_null )
 	local cache = usecaching and {}
 	local t, k = {}, 1
@@ -182,6 +162,7 @@ return base64
 
 
 --[[
+
 ------------------------------------------------------------------------------
 This software is available under 2 licenses -- choose whichever you prefer.
 ------------------------------------------------------------------------------
@@ -221,4 +202,5 @@ AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
 ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 ------------------------------------------------------------------------------
+
 --]]
