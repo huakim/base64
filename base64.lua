@@ -120,7 +120,7 @@ local function decode( b64, decoder, usecaching )
 	
 	if decoder then
 		for charcode, b64code in pairs( decoder ) do
-			if b4code > 61 then
+			if b64code > 61 then
 				if b64code == 62 then s62 = charcode
 				elseif b64code == 63 then s63 = charcode
 				elseif b64code == 64 then spad = charcode
