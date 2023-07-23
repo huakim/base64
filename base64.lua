@@ -1,6 +1,4 @@
 -- Source: https://github.com/iskolbin/lbase64
--- License Selected to MIT License. (1dealGas)
--- License text also available in In-Game "Copy Credits To Clipboard" Option.
 
 
 --[[
@@ -181,6 +179,7 @@ base64.makedecoder = makedecoder
 base64.encode = encode
 base64.decode = decode
 return base64
+
 
 --[[
 ------------------------------------------------------------------------------
