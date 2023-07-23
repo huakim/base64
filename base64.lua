@@ -66,8 +66,17 @@ local function makedecoder( s62, s63, spad )
 	return decoder
 end
 
+local function makedecoder_from( encoder )
+	local decoder = {}
+	decoder[ encoder[0] ] = 0
+	for b64code, charcode in ipairs(encoder) do
+		decoder[charcode] = b64code
+	end
+	return decoder
+end
+
 local DEFAULT_ENCODER = makeencoder()
-local DEFAULT_DECODER = makedecoder()
+local DEFAULT_DECODER = makedecoder_from(DEFAULT_ENCODER)
 
 
 local function encode( str, encoder, usecaching )
@@ -158,6 +167,7 @@ end
 
 base64.makeencoder = makeencoder
 base64.makedecoder = makedecoder
+base64.makedecoder_from = makedecoder_from
 base64.encode = encode
 base64.decode = decode
 return base64
