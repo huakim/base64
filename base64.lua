@@ -1,4 +1,8 @@
 -- Source: https://github.com/iskolbin/lbase64
+-- License Selected to MIT License. (1dealGas)
+-- License text also available in In-Game "Copy Credits To Clipboard" Option.
+
+
 --[[
 
  base64 -- v1.5.3 public domain Lua base64 encoder/decoder
@@ -24,6 +28,10 @@
 
 
 local base64 = {}
+
+local pattern_prim = '[^%w%+%/%=]'
+local pattern_customdecoder = '[^%%w%%%s%%%s%%%s]'
+local str_null = ''
 
 local shl = bit.lshift
 local shr = bit.rshift
@@ -52,7 +60,7 @@ local function makeencoder( s62, s63, spad )
 	local encoder = {}
 	b64t[62] = s62 or '+'
 	b64t[63] = s63 or '/'
-	b64t[64] = s64 or '='
+	b64t[64] = spad or '='
 	encoder[0] = byte(b64t[0])
 	for b64code, char in ipairs(b64t) do
 		encoder[b64code] = char:byte()
@@ -110,18 +118,30 @@ local function decode( b64, decoder, usecaching )
 	-- Contains Bugfix from the Issue https://github.com/iskolbin/lbase64/issues/5
 	
 	decoder = decoder or DEFAULT_DECODER
-	local pattern = '[^%w%+%/%=]'
+	local pattern = pattern_prim
+	local decoder0 = decoder[0]
+	local s62,s63,spad
 	if decoder then
-		local s62, s63
-		for charcode, b64code in pairs( decoder ) do
+
+		if decoder0==62 then
+			s62 = 0
+		elseif decoder0==63 then
+			s63 = 0
+		elseif decoder0==64 then
+			spad = 0
+		end
+
+		for charcode, b64code in ipairs( decoder ) do
 			if b64code == 62 then s62 = charcode
 			elseif b64code == 63 then s63 = charcode
 			elseif b64code == 64 then spad = charcode
 			end
 		end
-		pattern = ('[^%%w%%%s%%%s%%%s]'):format( char(s62), char(s63), char(spad) )
+
+		pattern = format( pattern_customdecoder, char(s62), char(s63), char(spad) )
+
 	end
-	b64 = b64:gsub( pattern, '' )
+	b64 = b64:gsub( pattern, str_null )
 	local cache = usecaching and {}
 	local t, k = {}, 1
 	local n = #b64
@@ -161,7 +181,6 @@ base64.makedecoder = makedecoder
 base64.encode = encode
 base64.decode = decode
 return base64
-
 
 --[[
 ------------------------------------------------------------------------------
